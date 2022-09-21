@@ -1,29 +1,31 @@
 package main
 
 import (
-	"context"
-	"fmt"
-	"log"
 	"os"
-	"time"
+
+	"go-react-calorie-tracker/server/routes"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 )
 
-func main {
+func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8000"
 	}
+
 	router := gin.New()
 	router.Use(gin.Logger())
-	router.Use(gin.Recovery())
 	router.Use(cors.Default())
-	router.GET("/api/entries", getEntries)
-	router.POST("/api/entries", postEntry)
-	router.GET("/api/entries/:id", getEntry)
-	router.PUT("/api/entries/:id", putEntry)
-	router.DELETE("/api/entries/:id", deleteEntry)
-	srv := &http.Server{
-		Addr:    ":" + port,
-		Handler: router,
-		
+
+	router.POST("/entry/create", routes.AddEntry)
+	router.GET("/entries", routes.GetEntries)
+	router.GET("/entry/:id/", routes.GetEntryById)
+	router.GET("/ingredient/:ingredient", routes.GetEntriesByIngredient)
+
+	router.PUT("/entry/update/:id", routes.UpdateEntry)
+	router.PUT("/ingredient/update/:id", routes.UpdateIngredient)
+	router.DELETE("/entry/delete/:id", routes.DeleteEntry)
+	router.Run(":" + port)
 }
