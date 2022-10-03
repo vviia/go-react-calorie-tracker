@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	//add route to model
 	"go-react-calorie-tracker/server/models"
 
 	"github.com/gin-gonic/gin"
